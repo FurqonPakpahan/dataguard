@@ -1,0 +1,32 @@
+contract_name: transactions_daily_check
+table: transactions
+description: Data quality contract for daily transactions table
+
+rules:
+  - column: transaction_id
+    checks:
+      - type: not_null
+      - type: unique
+
+  - column: amount
+    checks:
+      - type: not_null
+        max_null_percentage: 1
+      - type: value_range
+        min: 0
+        max: 1000000000
+
+  - column: status
+    checks:
+      - type: not_null
+      - type: allowed_values
+        values: ["success", "pending", "failed"]
+
+  - column: created_at
+    checks:
+      - type: data_type
+        expected_type: timestamp
+
+row_count_check:
+  compare_to: previous_day
+  max_drop_percentage: 20

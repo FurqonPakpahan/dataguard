@@ -7,13 +7,22 @@ services:
     environment:
       - AIRFLOW__CORE__LOAD_EXAMPLES=false
       - _PIP_ADDITIONAL_REQUIREMENTS=pyyaml psycopg2-binary python-dotenv elasticsearch==8.15.0
+      - POSTGRES_HOST=host.docker.internal
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=dataguard_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - ELASTICSEARCH_HOST=http://elasticsearch:9200
     ports:
       - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./examples/dags:/opt/airflow/dags
       - ./dataguard:/opt/airflow/dags/dataguard
-      - ./.env:/opt/airflow/dags/.env
+      - ./examples/contracts:/opt/airflow/dags/examples/contracts
       - airflow_data:/opt/airflow
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
     container_name: dataguard-elasticsearch

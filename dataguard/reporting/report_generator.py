@@ -58,8 +58,8 @@ def generate_incident_report(validation_result: dict) -> str:
 
 
 def save_report_to_file(report_content: str, output_path: str) -> None:
-    """
+    ""
     Menyimpan laporan insiden ke file.
-    """
+    ""
     with open(output_path, "w") as f:
         f.write(report_content)
